@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.mybatis.mapper.ReplyMapper">
+    <!-- 댓글 작성 -->
+    <insert id="insertReply">
+        INSERT INTO TBL_REPLY (ID, REPLY_CONTENT, MEMBER_ID, POST_ID, REPLY_DEPTH, CREATED_DATE, UPDATED_DATE)
+        VALUES (SEQ_REPLY.NEXTVAL, #{replyContent}, #{memberId}, #{postId}, #{replyDepth}, SYSDATE, SYSDATE)
+    </insert>
+
+    <!-- 대댓글 작성 -->
+    <insert id="insertSubReply">
+        INSERT INTO TBL_REPLY (ID, REPLY_CONTENT, MEMBER_ID, POST_ID, GROUP_ID, REPLY_DEPTH, CREATED_DATE, UPDATED_DATE)
+        VALUES (SEQ_REPLY.NEXTVAL, #{replyContent}, #{memberId}, #{postId}, #{groupId}, #{replyDepth}, SYSDATE, SYSDATE)
+    </insert>
+
+
+    <!-- 댓글 목록 조회 -->
+    <select id="selectRepliesByPostId" resultType="replyDTO">
+        SELECT R.ID, R.REPLY_CONTENT, R.MEMBER_ID, M.MEMBER_NAME, R.POST_ID,
+               R.GROUP_ID, R.REPLY_DEPTH, R.CREATED_DATE, R.UPDATED_DATE
+        FROM TBL_REPLY R
+        JOIN TBL_MEMBER M
+            ON R.MEMBER_ID = M.ID
+        WHERE R.POST_ID = #{postId} AND R.GROUP_ID IS NULL
+    </select>
+
+    <!-- 대댓글 목록 조회 -->
+    <select id="selectSubRepliesByGroupId" resultType="replyDTO">
+        SELECT R.ID, R.REPLY_CONTENT, R.MEMBER_ID, M.MEMBER_NAME, R.POST_ID,
+               R.GROUP_ID, R.REPLY_DEPTH, R.CREATED_DATE, R.UPDATED_DATE
+        FROM TBL_REPLY R
+        JOIN TBL_MEMBER M
+            ON R.MEMBER_ID = M.ID
+        WHERE R.GROUP_ID = #{groupId}
+    </select>
+
+    <!-- 대댓글의 부모댓글(groupId) 조회-->
+    <select id="selectById" resultType="replyVO">
+        SELECT ID, REPLY_CONTENT, MEMBER_ID, POST_ID, GROUP_ID, REPLY_DEPTH, CREATED_DATE, UPDATED_DATE
+        FROM TBL_REPLY
+        WHERE ID = #{id}
+    </select>
+
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteReply">
+        DELETE FROM TBL_REPLY WHERE ID = #{id}
+    </delete>
+<!--    대댓글 삭제-->
+    <delete id="deleteSubRepliesByGroupId">
+        DELETE FROM TBL_REPLY WHERE GROUP_ID = #{groupId}
+    </delete>
+
+    <!-- 댓글 수정 -->
+    <update id="updateReply">
+        UPDATE TBL_REPLY
+        SET REPLY_CONTENT = #{replyContent}, UPDATED_DATE = SYSDATE
+        WHERE ID = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.mybatis.mapper.NotificationMapper">
+    <!-- 알림 삽입 -->
+    <insert id="insertNotification">
+        INSERT INTO TBL_NOTIFICATION (ID, USER_ID, MESSAGE, CREATED_DATE, IS_READ)
+        VALUES (SEQ_NOTIFICATION.NEXTVAL, #{userId}, #{message}, SYSDATE, #{isRead})
+    </insert>
+
+    <!-- 사용자별 알림 조회 -->
+    <select id="selectNotificationsByUserId" resultType="notificationVO">
+        SELECT ID, USER_ID, MESSAGE, CREATED_DATE, IS_READ
+        FROM TBL_NOTIFICATION
+        WHERE USER_ID = #{userId}
+        ORDER BY CREATED_DATE DESC
+    </select>
+
+    <!-- 알림 읽음 처리 -->
+    <update id="updateNotificationReadStatus">
+        UPDATE TBL_NOTIFICATION
+        SET IS_READ = 1,
+            MESSAGE = '새로운 알림이 없습니다'
+        WHERE ID = #{notificationId}
+    </update>
+</mapper>

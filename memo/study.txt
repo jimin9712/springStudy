@@ -1,0 +1,104 @@
+Controller(화면) 에서는 DTO 사용 , OCP 때문에
+DataBase 에서는 VO , 나중에 엔티티로 바뀜
+
+DB 연동할 때는 mybatis랑 sql도 추가해서 create
+
+application.yml 파일에서 원래 config에서 했던 설정
+mybatis  설정 추가
+
+interface로 하나 만들고 Mapper라고 Spring에 보고해줘야함
+interface에서 설정한 후
+ 
+config .xml
+timeMapper.xml 파일 만들고
+-> 여기서 사용할 수 있음
+select id="getTime" resultType="string" 이런 식으로
+
+
+회원테이블에 대한 INSERT 서비스를 제작한 뒤
+단위 테스트를 진행한다
+
+Mapper 인터페이스는  JUnit으로 진행하고
+Controller 테스트는 브라우저에서 진행한다.
+화면없이 콘솔로만 확인한다.
+
+9시 40-9시 50분 영상 확인
+
+이메일, 비밀번호 칼럼을 추가하고
+VO 및 DTO를 수정한다
+Mapper  단위 테스트 진행
+Controller 브라우저 테스트 진행
+
+3시 20분 까지
+
+
+게시글 CRUD 구현
+게시글 테이블을 제작한다.
+ID, POST_TITLE, POST_CONTENT, POST_READ_CONTENT, STATUS, CREATED_DATE, UPDATED_DATE
+
+VO, DTO
+
+게시글 작성
+
+게시글 목록
+-JOIN
+게시글 조회
+-JOIN
+게시글 수정
+게시글 삭제
+조회수 증가
+게시글 목록(최신순)
+-join
+
+단위 테스트 모두 진행(컨트롤러 제작까지)
+
+보통 DB에서
+
+숙제1================================
+대댓글 CRUD 구현
+
+대댓글 테이블을 제작한다.
+REPLY_CONTENT, GROUP_ID, REPLY_DEPTH
+
+댓글은 GROUP_ID가 NULL이다. 
+
+VO, DTO 구현
+
+댓글 작성
+대댓글 작성
+댓글 목록
+대댓글 목록
+댓글 삭제
+
+-> 원본이 삭제 되면 "삭제된 댓글입니다." 로
+UPDATE 후 대댓글은 유지가 보통이지만 일단 그냥 해라
+
+ON DELETE CASCADE 이거 함 써봐라
+부모를 날리면 참조 다 날아감(연결된 거 그냥 다 날아가는 옵션)
+
+댓글 수정 - 그냥 업데이트
+
+모든 댓글에는 작성자 정보가 포함된다.
+숙제2======================================
+비슷한 내용으로 더 해보자
+알림
+1. 댓글에 대댓글이 달렸을 때  댓글의 멤버 ID에 알림이 울리게 해보자
+
+알림 테이블을 제작한다.
+
+
+toVO를 사용하는 이유? <- 제대로 공부하고 쓸 것
+toVO로 DTO 데이터를 변환을 간단하게 해서 Controller 같은 곳에서 
+수동 변환 하는 작업을 줄이려고 씀
+
+화면에서 VO에 setter를 지정하여 직접적으로 DB값 변환을 할 수 있는데 이를 방지하려고
+ setter를 빼고 DTO에 .toVO를 넣어 값을 변환하는 것
+
+
+===========================================
+Slack 깃 구독 연동
+
+ /github subscribe acafela/slack-test /github subscribe {소유자}/{저장소}
+
+
+패키지가 도메인에 있으면 그 안에서도 나눠서 관리
